@@ -1,0 +1,52 @@
+---
+title: "Get batch status"
+description: "Poll batch progress until it finishes"
+---
+
+## Endpoint
+
+- `GET /v1/batches/{batch_id}`
+- Auth required: API key
+
+## Purpose
+
+Check whether a batch is queued, running, or finished, and view progress counts.
+
+## Response fields
+
+- `batch_id`
+- `status`
+- `progress.processed`
+- `progress.total`
+- Timestamps: `created_at`, `started_at`, `finished_at` (if available)
+- Model info: `model_id`, `version` (if available)
+- `error` object if `status=failed`:
+  - `error.code`
+  - `error.message`
+
+## Polling guidance
+
+- Poll every 2–5 seconds for small batches; 10+ seconds for large batches.
+- Back off after `429` responses.
+
+## Status meanings
+
+- `queued`: accepted, waiting to run
+- `running`: processing images
+- `succeeded`: results ready
+- `failed`: see `error`
+- `cancelled`: stopped by client or system
+
+## Example
+
+```bash
+curl -X GET https://api.yourdomain.com/v1/batches/$BATCH_ID \
+  -H "Authorization: Bearer $API_KEY"
+```
+
+## Errors
+
+- 400: invalid `batch_id`
+- 401: missing or invalid key
+- 404: batch not found
+- 429: rate limited; slow polling

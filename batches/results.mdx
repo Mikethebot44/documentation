@@ -1,0 +1,64 @@
+---
+title: "Download results"
+description: "Fetch CSV, XLSX, or JSON outputs"
+---
+
+## Endpoint
+
+- `GET /v1/batches/{batch_id}/results?format=csv|xlsx|json`
+- Auth required: API key
+
+## Purpose
+
+Download the triage output after a batch succeeds.
+
+## Formats and headers
+
+- `format=csv` → `text/csv`
+- `format=xlsx` → `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`
+- `format=json` → `application/json`
+
+## Retention
+
+- Results are retained for 30 days. URLs do not expire within that window.
+
+## Examples
+
+Download CSV:
+
+```bash
+curl -X GET "https://api.yourdomain.com/v1/batches/$BATCH_ID/results?format=csv" \
+  -H "Authorization: Bearer $API_KEY" \
+  -o results.csv
+```
+
+Download JSON:
+
+```bash
+curl -X GET "https://api.yourdomain.com/v1/batches/$BATCH_ID/results?format=json" \
+  -H "Authorization: Bearer $API_KEY"
+```
+
+Simple Python download:
+
+```python
+import requests
+
+resp = requests.get(
+    f"https://api.yourdomain.com/v1/batches/{batch_id}/results",
+    params={"format": "csv"},
+    headers={"Authorization": f"Bearer {api_key}"},
+    timeout=30,
+)
+resp.raise_for_status()
+with open("results.csv", "wb") as f:
+    f.write(resp.content)
+```
+
+## Errors
+
+- 400: invalid format
+- 401: missing or invalid key
+- 404: batch not found
+- 409: batch not finished yet
+- 429: rate limited; retry with backoff

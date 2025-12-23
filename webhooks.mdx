@@ -1,0 +1,36 @@
+---
+title: "Webhooks"
+description: "Receive batch events without polling"
+---
+
+## Why webhooks
+
+Use webhooks to get notified when a batch finishes instead of polling.
+
+## Event types
+
+- `batch.succeeded`
+- `batch.failed`
+- `batch.cancelled`
+
+## Payload
+
+```json
+{
+  "event": "batch.succeeded",
+  "batch_id": "bat_123",
+  "results_url": "https://api.yourdomain.com/v1/batches/bat_123/results?format=csv",
+  "created_at": "2024-05-15T12:00:00Z"
+}
+```
+
+## Security
+
+- HMAC signature header: `X-Signature`
+- Signature covers the raw request body plus a timestamp header.
+- Reject requests with timestamps older than 5 minutes to limit replay.
+
+## Retries
+
+- Retries use exponential backoff for up to 24 hours.
+- You should return `2xx` when you receive and process an event.

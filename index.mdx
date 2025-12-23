@@ -1,97 +1,48 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "Overview"
+description: "What the Batch Field Photo Triage API does and when to use it"
 ---
 
-## Setting up
+## What this API does
 
-Get your documentation site up and running in minutes.
+- Submit a batch of field photos.
+- Get a spreadsheet-style result that flags likely problems, severity, and which images can be ignored.
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
+## Key concepts
 
-## Make it yours
+- **Batch**: one submission with many images.
+- **Job lifecycle**: queued → running → succeeded | failed | cancelled.
+- **Results**: downloadable as CSV, XLSX, or JSON.
+- **Model selection**: set by the API key you send.
 
-Design a docs site that looks great and empowers your users.
+## When to use it
 
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+- Post-survey QA triage.
+- Routine site monitoring.
+- Compliance or asset inspection pipelines.
+
+## What is not included
+
+- No model training endpoints.
+- No human review workflow in the base API.
+
+## Base URL and versioning
+
+- Base URL: `https://api.<yourdomain>.com`
+- Version prefix: `/v1/`
+- Breaking changes ship under a new version path.
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Create a batch, poll, and download results end to end.
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="Authentication" icon="key" href="/authentication">
+    Send your API key in every request.
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="Batches" icon="layers" href="/batches/index">
+    Create batches, track status, and fetch outputs.
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="Results format" icon="table-columns" href="/results-format">
+    Understand the spreadsheet schema and sample rows.
   </Card>
-</Columns>
-
-## Create beautiful pages
-
-Everything you need to create world-class documentation.
-
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
-
-## Need inspiration?
-
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+</CardGroup>

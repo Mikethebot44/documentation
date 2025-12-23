@@ -1,0 +1,33 @@
+---
+title: "Batches"
+description: "Understand batch lifecycle and identifiers"
+---
+
+## Lifecycle
+
+- queued
+- running
+- succeeded
+- failed
+- cancelled
+
+## Identifiers
+
+- `batch_id`: server generated
+- `external_id`: optional, set by you for idempotency and tracking
+
+## Flow
+
+Create batch → Poll status → Download results
+
+<CardGroup cols={3}>
+  <Card title="Create" icon="plus" href="/batches/create">
+    Submit images and metadata.
+  </Card>
+  <Card title="Status" icon="clock" href="/batches/status">
+    Poll progress until a terminal state.
+  </Card>
+  <Card title="Results" icon="table-columns" href="/batches/results">
+    Download CSV, XLSX, or JSON outputs.
+  </Card>
+</CardGroup>

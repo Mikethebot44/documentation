@@ -1,0 +1,21 @@
+---
+title: "Authentication"
+description: "Send your API key on every request"
+---
+
+## API key headers
+
+- `Authorization: Bearer <api_key>`
+- Optional: `X-API-Key: <api_key>`
+
+The key selects your paid custom model and enforces your quotas.
+
+## Security guidance
+
+- Do not embed keys in client-side apps.
+- Rotate keys if a key is exposed.
+
+## Auth errors
+
+- 401: missing or invalid key
+- 403: key is valid but blocked (quota exceeded or model disabled)

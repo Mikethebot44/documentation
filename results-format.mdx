@@ -1,0 +1,57 @@
+---
+title: "Results format"
+description: "Column schema and sample outputs"
+---
+
+## Columns
+
+- `image_id` (string)
+- `filename` (string)
+- `problem_likely` (boolean)
+- `severity` (enum: none, low, medium, high, critical)
+- `ignore` (boolean)
+- `confidence` (float 0–1)
+
+### Optional columns
+
+- `tags` (string list; JSON array in JSON output, comma-separated in CSV)
+- `reason` (short text)
+- `recommendation` (enum: review, rephoto, escalate)
+
+## Semantics
+
+- `ignore`: safe to archive without review.
+- `severity`: urgency of the suspected issue.
+- `confidence`: model confidence for the assigned labels.
+
+## Sample CSV (first rows)
+
+```csv
+image_id,filename,problem_likely,severity,ignore,confidence,tags,reason,recommendation
+img_01,site-1.jpg,true,high,false,0.92,"[\"corrosion\"]","Visible rust near joint","escalate"
+img_02,site-2.jpg,false,none,true,0.81,[],,"review"
+img_03,site-3.jpg,true,medium,false,0.67,"[\"debris\"]","Obstruction on pathway","review"
+img_04,site-4.jpg,true,low,false,0.58,[],,
+img_05,site-5.jpg,false,none,true,0.76,[],,
+```
+
+## Sample JSON (one record)
+
+```json
+{
+  "image_id": "img_01",
+  "filename": "site-1.jpg",
+  "problem_likely": true,
+  "severity": "high",
+  "ignore": false,
+  "confidence": 0.92,
+  "tags": ["corrosion"],
+  "reason": "Visible rust near joint",
+  "recommendation": "escalate"
+}
+```
+
+## Backwards compatibility
+
+- Columns listed here will not be removed within `v1`.
+- New columns may be added; ignore unknown fields gracefully.
