@@ -1,0 +1,49 @@
+---
+title: "Errors and limits"
+description: "Standard error shape, limits, and retry rules"
+---
+
+## Error object
+
+```json
+{
+  "error": {
+    "code": "string",
+    "message": "string",
+    "details": "optional"
+  }
+}
+```
+
+## Status codes
+
+- 400: invalid input
+- 401: auth required
+- 403: key valid but forbidden (quota or model disabled)
+- 404: not found
+- 413: payload too large
+- 429: rate limited
+- 500/503: server error
+
+## Limits
+
+- Max images per batch: 500
+- Max file size per image: 25 MB
+- Supported types: jpg, jpeg, png
+- Max request size: 2 GB
+- Rate limit: 300 requests per minute per key
+- Monthly quota: 500,000 images per key
+
+## Retries
+
+- Safe to retry:
+  - `GET /v1/batches/{batch_id}`
+  - `GET /v1/batches/{batch_id}/results`
+- For `POST /v1/batches`, if the client times out, reuse the same `external_id` to avoid duplicates.
+- Use exponential backoff on `429`.
+
+## Idempotency
+
+- Optional header: `Idempotency-Key` for `POST /v1/batches`.
+- Keys are remembered for 24 hours.
+- Conflicting requests with the same key return the original response.

@@ -1,0 +1,68 @@
+---
+title: "Create a batch"
+description: "Submit images for triage"
+---
+
+## Endpoint
+
+- `POST /v1/batches`
+- Auth required: API key
+
+## Purpose
+
+Upload a set of images for automated triage. Use `external_id` to avoid duplicate batches when retrying.
+
+## Request
+
+- Content type: `multipart/form-data`
+- Fields:
+  - `files[]` (required): image files. Types: jpg, jpeg, png. Max file size: 25 MB. Max images per batch: 500.
+  - `external_id` (optional, string)
+  - `metadata` (optional JSON): e.g., site, project, date, notes.
+  - `options` (optional JSON):
+    - `top_k` (default 3)
+    - `include_explanations` (default true)
+    - `output_formats` (default ["csv"])
+
+### Validation behavior
+
+- If any file fails validation, the request is rejected with `400` and no files are queued.
+
+## Response
+
+- Status: `202 Accepted`
+- Body:
+  - `batch_id`
+  - `status`
+  - `counts.submitted`
+  - `links` (URLs for status and results)
+
+## Examples
+
+Minimal curl:
+
+```bash
+curl -X POST https://api.yourdomain.com/v1/batches \
+  -H "Authorization: Bearer $API_KEY" \
+  -F "files[]=@images/site-1.jpg" \
+  -F "files[]=@images/site-2.jpg"
+```
+
+With metadata and options:
+
+```bash
+curl -X POST https://api.yourdomain.com/v1/batches \
+  -H "Authorization: Bearer $API_KEY" \
+  -F "files[]=@images/site-1.jpg" \
+  -F "files[]=@images/site-2.jpg" \
+  -F 'external_id=field-run-042' \
+  -F 'metadata={"site":"field-a","date":"2024-05-01","notes":"north fence"}' \
+  -F 'options={"output_formats":["csv","json"],"include_explanations":true,"top_k":3}'
+```
+
+## Errors
+
+- 400: invalid file type or limits exceeded
+- 401: missing or invalid key
+- 413: payload too large
+- 429: rate limited; retry with backoff
